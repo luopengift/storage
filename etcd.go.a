@@ -27,8 +27,8 @@ func (etcd *Etcd) Interface() interface{} {
 }
 
 // Put xx
-func (etcd *Etcd) Put(ctx context.Context, key, val string, opts ...interface{}) (interface{}, error) {
-	return etcd.Client.Put(ctx, key, val)
+func (etcd *Etcd) Put(ctx context.Context, key string, val map[string]interface{}, opts ...interface{}) (interface{}, error) {
+	return etcd.Client.Put(ctx, key, "val")
 }
 
 // Get xx

@@ -1,31 +1,33 @@
-package storage
+package main
 
 import (
 	"context"
 	"fmt"
 	"sync"
-	"testing"
+
+	"github.com/luopengift/log"
+	"github.com/luopengift/storage"
 )
 
-func TestCache(t *testing.T) {
+func main() {
 	var wg sync.WaitGroup
-	store, err := CacheInit()
+	store, err := storage.CacheInit()
 	if err != nil {
-		t.Error(err)
+		log.Info("%v", err)
 	}
 	ctx := context.Background()
 	store.Put(ctx, "ttt", "boo")
 	fmt.Println(store)
 	for i := 0; i < 100000; i++ {
 		wg.Add(1)
-		go func() {
+		go func(i int) {
 			defer wg.Done()
-			_, err := store.Get(ctx, "ttt")
+			err := store.Put(ctx, "ttt", i)
 			if err != nil {
-				t.Error(err)
+				log.Error("%v", err)
 			}
 			//fmt.Println(tt)
-		}()
+		}(i)
 	}
 	wg.Wait()
 }

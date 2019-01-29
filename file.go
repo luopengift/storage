@@ -4,8 +4,10 @@ import (
 	"context"
 	"io/ioutil"
 	"os"
-	"path"
+	"path/filepath"
 )
+
+//var _ Storager = &File{}
 
 // File implement storager interface
 type File struct {
@@ -13,7 +15,7 @@ type File struct {
 }
 
 // FileInit file init
-func FileInit(dir string) (Storager, error) {
+func FileInit(dir string) (*File, error) {
 	if err := os.MkdirAll(dir, 0755); err != nil {
 		return nil, err
 	}
@@ -22,29 +24,23 @@ func FileInit(dir string) (Storager, error) {
 	}, nil
 }
 
-// Interface interface
-func (f *File) Interface() interface{} {
-	return nil
-}
-
 // Put xx
-func (f *File) Put(ctx context.Context, key, val string, opts ...interface{}) (interface{}, error) {
-	err := ioutil.WriteFile(path.Join(f.BaseDir, key), []byte(val), 0644)
-	return nil, err
+func (f *File) Put(ctx context.Context, key, val string, opts ...interface{}) error {
+	return ioutil.WriteFile(filepath.Join(f.BaseDir, key), []byte(val), 0644)
 }
 
 // Get xx
-func (f *File) Get(ctx context.Context, key string, opts ...interface{}) (interface{}, error) {
-	return ioutil.ReadFile(path.Join(f.BaseDir, key))
+func (f *File) Get(ctx context.Context, key string, val interface{}, opts ...interface{}) ([]byte, error) {
+	return ioutil.ReadFile(filepath.Join(f.BaseDir, key))
 }
 
 // Delete xx
-func (f *File) Delete(ctx context.Context, key string, opts ...interface{}) (interface{}, error) {
-	return nil, os.Remove(path.Join(f.BaseDir, key))
+func (f *File) Delete(ctx context.Context, key string, res map[string]interface{}, opts ...interface{}) error {
+	return os.Remove(filepath.Join(f.BaseDir, key))
 }
 
 // Do x
-func (f *File) Do(ctx context.Context, op interface{}) (interface{}, error) {
+func (f *File) Do(ctx context.Context, op interface{}, opts ...interface{}) (interface{}, error) {
 	return nil, nil
 }
 
