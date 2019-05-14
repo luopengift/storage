@@ -47,13 +47,13 @@ func QueryByPage(collect string, selector, results interface{}, offset, size int
 // Delete delete
 func Delete(collect string, selector interface{}) (*mgo.ChangeInfo, error) {
 	info, err := collection.C(collect).RemoveAll(selector)
-	log.Debug("Mongo delete[%s], selector=%#v; info=%#v, err=%v", collect, selector, info, err)
+	log.Debugf("Mongo delete[%s], selector=%#v; info=%#v, err=%v", collect, selector, info, err)
 	return info, err
 }
 
 // DeleteID delete id
 func DeleteID(collect string, selector interface{}) error {
 	err := collection.C(collect).RemoveId(selector)
-	log.Debug("Mongo deleteId[%s], selector=%#v; err=%v", collect, selector, err)
+	log.Debugf("Mongo deleteId[%s], selector=%#v; err=%v", collect, selector, err)
 	return err
 }

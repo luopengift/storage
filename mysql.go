@@ -109,7 +109,7 @@ func (mysql *MySQL) Get(ctx context.Context, key string, value map[string]interf
 						return nil, err
 					}
 				default:
-					return nil, log.Errorf("%v", name)
+					return nil, fmt.Errorf("%v", name)
 				}
 			}
 		}
@@ -141,7 +141,7 @@ func (mysql *MySQL) Update(ctx context.Context, table string, row map[string]int
 	}
 	sql := fmt.Sprintf("UPDATE %s SET %s WHERE %s=?", table, strings.Join(updateList, ", "), selector)
 	valueList = append(valueList, value)
-	log.Debug("%s, %s", sql, fmt.Sprintf("%#v", valueList))
+	log.Debugf("%s, %s", sql, fmt.Sprintf("%#v", valueList))
 	stmt, err := mysql.Prepare(sql)
 	if err != nil {
 		return nil, err
